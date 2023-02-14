@@ -1,14 +1,8 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
+pub mod lints;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+use tan::{ann::Ann, expr::Expr};
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+pub trait Lint {
+    fn name() -> String;
+    fn run(expr: &Ann<Expr>);
 }
