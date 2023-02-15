@@ -1,7 +1,8 @@
 [package]
 name = "tan_lint"
-version = "0.1.0"
+version = "0.4.0"
 edition = "2021"
 
 [dependencies]
+lsp-types = "0.93"
 tan = { path = "../tan", version = "0.4" }
