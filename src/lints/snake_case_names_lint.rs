@@ -1,4 +1,4 @@
-use lsp_types::{Diagnostic, DiagnosticSeverity, Range};
+use lsp_types::{Diagnostic, DiagnosticSeverity};
 use tan::{ann::Ann, expr::Expr};
 
 use crate::Lint;
@@ -69,7 +69,7 @@ impl<'a> SnakeCaseNamesLint<'a> {
                         };
 
                         self.diagnostics.push(Diagnostic {
-                            range: Range { start, end },
+                            range: lsp_types::Range { start, end },
                             severity: Some(DiagnosticSeverity::WARNING),
                             code: None,
                             code_description: None,
