@@ -55,7 +55,7 @@ impl<'a> SnakeCaseNamesLint<'a> {
                     };
 
                     if s.len() > MAX_NAME_LENGTH {
-                        let range = name.get_range().unwrap();
+                        let range = name.get_range();
 
                         let start = tan::range::Position::from(range.start, self.input);
                         let start = lsp_types::Position {
