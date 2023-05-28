@@ -1,0 +1,10 @@
+(do
+    ; Computes `x!`, the factorial of `x`.
+    (let this-is-a-really-really-really-long-name-to-trigger-a-lint-fact (Func (x)
+        (if (= x 0)
+            1
+            (* (fact (- x 1)) x)
+        )
+    ))
+    (fact 5)
+)
