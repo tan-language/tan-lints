@@ -55,30 +55,30 @@ impl<'a> SnakeCaseNamesLint<'a> {
                     };
 
                     if s.len() > MAX_NAME_LENGTH {
-                        let range = name.get_range();
+                        if let Some(range) = name.get_range() {
+                            let start = tan::range::Position::from_index(range.start, self.input);
+                            let start = lsp_types::Position {
+                                line: start.line as u32,
+                                character: start.col as u32,
+                            };
+                            let end = tan::range::Position::from_index(range.end, self.input);
+                            let end = lsp_types::Position {
+                                line: end.line as u32,
+                                character: end.col as u32,
+                            };
 
-                        let start = tan::range::Position::from(range.start, self.input);
-                        let start = lsp_types::Position {
-                            line: start.line as u32,
-                            character: start.col as u32,
-                        };
-                        let end = tan::range::Position::from(range.end, self.input);
-                        let end = lsp_types::Position {
-                            line: end.line as u32,
-                            character: end.col as u32,
-                        };
-
-                        self.diagnostics.push(Diagnostic {
-                            range: lsp_types::Range { start, end },
-                            severity: Some(DiagnosticSeverity::WARNING),
-                            code: None,
-                            code_description: None,
-                            source: None,
-                            message: format!("The symbol `{s}` is too long."),
-                            related_information: None,
-                            tags: None,
-                            data: None,
-                        });
+                            self.diagnostics.push(Diagnostic {
+                                range: lsp_types::Range { start, end },
+                                severity: Some(DiagnosticSeverity::WARNING),
+                                code: None,
+                                code_description: None,
+                                source: None,
+                                message: format!("The symbol `{s}` is too long."),
+                                related_information: None,
+                                tags: None,
+                                data: None,
+                            });
+                        }
                     }
                 }
                 _ => {
