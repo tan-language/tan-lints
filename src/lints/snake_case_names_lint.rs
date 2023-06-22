@@ -7,12 +7,11 @@ use crate::Lint;
 /// The suggested maximum length for symbols.
 const MAX_NAME_LENGTH: usize = 42;
 
-pub struct SnakeCaseNamesLint<'a> {
-    input: &'a str,
+pub struct SnakeCaseNamesLint {
     pub diagnostics: Vec<Diagnostic>,
 }
 
-impl<'a> Lint for SnakeCaseNamesLint<'a> {
+impl Lint for SnakeCaseNamesLint {
     fn name(&self) -> String {
         "snake_case_names".to_owned()
     }
@@ -24,10 +23,9 @@ impl<'a> Lint for SnakeCaseNamesLint<'a> {
     }
 }
 
-impl<'a> SnakeCaseNamesLint<'a> {
-    pub fn new(input: &'a str) -> Self {
+impl SnakeCaseNamesLint {
+    pub fn new() -> Self {
         Self {
-            input,
             diagnostics: Vec::new(),
         }
     }
@@ -56,15 +54,13 @@ impl<'a> SnakeCaseNamesLint<'a> {
 
                     if s.len() > MAX_NAME_LENGTH {
                         if let Some(range) = name.get_range() {
-                            let start = tan::range::Position::from_index(range.start, self.input);
                             let start = lsp_types::Position {
-                                line: start.line as u32,
-                                character: start.col as u32,
+                                line: range.start.line as u32,
+                                character: range.start.col as u32,
                             };
-                            let end = tan::range::Position::from_index(range.end, self.input);
                             let end = lsp_types::Position {
-                                line: end.line as u32,
-                                character: end.col as u32,
+                                line: range.end.line as u32,
+                                character: range.end.col as u32,
                             };
 
                             self.diagnostics.push(Diagnostic {

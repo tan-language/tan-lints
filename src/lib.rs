@@ -12,20 +12,18 @@ pub trait Lint {
     fn run(&mut self, exprs: &[Ann<Expr>]);
 }
 
-pub fn compute_parse_error_diagnostics(input: &str, errors: Vec<Error>) -> Vec<Diagnostic> {
+pub fn compute_parse_error_diagnostics(errors: Vec<Error>) -> Vec<Diagnostic> {
     let mut diagnostics: Vec<Diagnostic> = Vec::new();
 
     for error in errors {
         if let Some(range) = error.range() {
-            let start = tan::range::Position::from_index(range.start, input);
             let start = lsp_types::Position {
-                line: start.line as u32,
-                character: start.col as u32,
+                line: range.start.line as u32,
+                character: range.start.col as u32,
             };
-            let end = tan::range::Position::from_index(range.end, input);
             let end = lsp_types::Position {
-                line: end.line as u32,
-                character: end.col as u32,
+                line: range.end.line as u32,
+                character: range.end.col as u32,
             };
 
             diagnostics.push(Diagnostic {
@@ -56,13 +54,15 @@ pub fn compute_diagnostics(input: &str) -> Vec<Diagnostic> {
         Ok(exprs) => {
             let mut diagnostics = Vec::new();
 
-            let mut lint = SnakeCaseNamesLint::new(input);
+            // #TODO some Lints may need the input!
+
+            let mut lint = SnakeCaseNamesLint::new();
             lint.run(&exprs);
             diagnostics.append(&mut lint.diagnostics);
 
             diagnostics
         }
-        Err(errors) => compute_parse_error_diagnostics(input, errors),
+        Err(errors) => compute_parse_error_diagnostics(errors),
     };
 
     diagnostics
