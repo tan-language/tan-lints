@@ -2,14 +2,14 @@ pub mod lints;
 
 use lints::snake_case_names_lint::SnakeCaseNamesLint;
 pub use lsp_types::{Diagnostic, DiagnosticSeverity, Range};
-use tan::{ann::Ann, api::parse_string_all, error::Error, expr::Expr};
+use tan::{api::parse_string_all, error::Error, expr::Expr};
 
 pub trait Lint {
     /// A unique name for the lint.
     fn name(&self) -> String;
     // #TODO needs return type.
     /// Runs after the parsing pass.
-    fn run(&mut self, exprs: &[Ann<Expr>]);
+    fn run(&mut self, exprs: &[Expr]);
 }
 
 pub fn compute_parse_error_diagnostics(errors: Vec<Error>) -> Vec<Diagnostic> {

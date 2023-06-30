@@ -1,5 +1,5 @@
 use lsp_types::{Diagnostic, DiagnosticSeverity};
-use tan::{ann::Ann, expr::Expr};
+use tan::expr::Expr;
 
 use crate::Lint;
 
@@ -16,7 +16,7 @@ impl Lint for SnakeCaseNamesLint {
         "snake_case_names".to_owned()
     }
 
-    fn run(&mut self, exprs: &[Ann<Expr>]) {
+    fn run(&mut self, exprs: &[Expr]) {
         for expr in exprs {
             self.run_expr(expr);
         }
@@ -30,16 +30,16 @@ impl SnakeCaseNamesLint {
         }
     }
 
-    fn run_expr(&mut self, expr: &Ann<Expr>) {
-        if let Ann(Expr::List(terms), _) = expr {
+    fn run_expr(&mut self, expr: &Expr) {
+        if let Expr::List(terms) = expr.unpack() {
             if terms.len() < 1 {
                 return;
             }
 
             let head = &terms[0];
 
-            match head {
-                Ann(Expr::Symbol(s), _) if s == "let" => {
+            match head.unpack() {
+                Expr::Symbol(s) if s == "let" => {
                     if terms.len() < 2 {
                         // #TODO this is an error, report!
                         return;
@@ -47,13 +47,13 @@ impl SnakeCaseNamesLint {
 
                     let name = &terms[1];
 
-                    let Ann(Expr::Symbol(s), _) = name else {
+                    let Expr::Symbol(s) = name.unpack() else {
                         // #TODO this is an error, report!
                         return;
                     };
 
                     if s.len() > MAX_NAME_LENGTH {
-                        if let Some(range) = name.get_range() {
+                        if let Some(range) = name.range() {
                             let start = lsp_types::Position {
                                 line: range.start.line as u32,
                                 character: range.start.col as u32,
