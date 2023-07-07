@@ -1,6 +1,6 @@
 [package]
-name = "tan_lint"
-description = "A collection of lints for the Tan language"
+name = "tan-lints"
+description = "A collection of lints for the Tan Language"
 version = "0.7.0"
 license = "Apache-2.0"
 repository = "https://github.com/tanlang-org/tan_lint"
@@ -11,4 +11,4 @@ edition = "2021"
 
 [dependencies]
 lsp-types = "0.94"
-tan = { path = "../tan", version = "0.7" }
+tan = { path = "../tan", version = "0.6" }
