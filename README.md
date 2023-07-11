@@ -1,6 +1,6 @@
 # Tan Lint
 
-A collection of lints for the Tan language. Currently the lints are used in the Tan LSP server.
+A collection of lints for the Tan language. Currently the lints are used in the Tan Language server.
 
 ## Status
 
@@ -20,10 +20,6 @@ For questions, suggestions, etc, you can reach the maintainer on
 
 This work is distributed under the terms of the Apache License (Version 2.0).
 See the [License](LICENSE.txt) for details.
-
-Any contribution intentionally submitted for inclusion in this project, as
-defined in the Apache-2.0 License, shall be licensed as above, without any
-additional terms or conditions.
 
 ## Disclaimer
 
