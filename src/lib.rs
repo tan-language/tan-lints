@@ -1,6 +1,8 @@
 pub mod lints;
 
-use lints::snake_case_names_lint::SnakeCaseNamesLint;
+use lints::{
+    no_arrow_in_names_lint::NoArrowInNamesLint, snake_case_names_lint::SnakeCaseNamesLint,
+};
 pub use lsp_types::{Diagnostic, DiagnosticSeverity, Range};
 use tan::{api::parse_string_all, error::Error, expr::Expr};
 
@@ -50,20 +52,23 @@ pub fn compute_diagnostics(input: &str) -> Vec<Diagnostic> {
 
     // #todo should run all lints.
 
-    let diagnostics = match result {
+    match result {
         Ok(exprs) => {
             let mut diagnostics = Vec::new();
 
             // #todo some Lints may need the input!
+            // #todo how to loop over lints?
 
             let mut lint = SnakeCaseNamesLint::new();
+            lint.run(&exprs);
+            diagnostics.append(&mut lint.diagnostics);
+
+            let mut lint = NoArrowInNamesLint::new();
             lint.run(&exprs);
             diagnostics.append(&mut lint.diagnostics);
 
             diagnostics
         }
         Err(errors) => compute_parse_error_diagnostics(errors),
-    };
-
-    diagnostics
+    }
 }

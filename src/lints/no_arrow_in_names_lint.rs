@@ -3,18 +3,14 @@ use tan::expr::Expr;
 
 use crate::Lint;
 
-// #todo #fix this is not a snake_case_names_lint it just checks name size!
-
-/// The suggested maximum length for symbols.
-const MAX_NAME_LENGTH: usize = 42;
-
-pub struct SnakeCaseNamesLint {
+// #
+pub struct NoArrowInNamesLint {
     pub diagnostics: Vec<Diagnostic>,
 }
 
-impl Lint for SnakeCaseNamesLint {
+impl Lint for NoArrowInNamesLint {
     fn name(&self) -> String {
-        "snake_case_names".to_owned()
+        "no_arrow_in_names".to_owned()
     }
 
     fn run(&mut self, exprs: &[Expr]) {
@@ -24,13 +20,14 @@ impl Lint for SnakeCaseNamesLint {
     }
 }
 
-impl SnakeCaseNamesLint {
+impl NoArrowInNamesLint {
     pub fn new() -> Self {
         Self {
             diagnostics: Vec::new(),
         }
     }
 
+    // #todo weird name.
     fn run_expr(&mut self, expr: &Expr) {
         if let Expr::List(terms) = expr.unpack() {
             if terms.is_empty() {
@@ -53,7 +50,9 @@ impl SnakeCaseNamesLint {
                         return;
                     };
 
-                    if s.len() > MAX_NAME_LENGTH {
+                    // #todo extract some machinery
+
+                    if s.contains("->") {
                         if let Some(range) = name.range() {
                             let start = lsp_types::Position {
                                 line: range.start.line as u32,
@@ -70,7 +69,7 @@ impl SnakeCaseNamesLint {
                                 code: None,
                                 code_description: None,
                                 source: None,
-                                message: format!("The symbol `{s}` is too long."),
+                                message: "The use of `->` should be avoided in names".to_string(),
                                 related_information: None,
                                 tags: None,
                                 data: None,
@@ -89,7 +88,7 @@ impl SnakeCaseNamesLint {
     }
 }
 
-impl Default for SnakeCaseNamesLint {
+impl Default for NoArrowInNamesLint {
     fn default() -> Self {
         Self::new()
     }
