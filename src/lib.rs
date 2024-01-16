@@ -7,7 +7,7 @@ use tan::{api::parse_string_all, error::Error, expr::Expr};
 pub trait Lint {
     /// A unique name for the lint.
     fn name(&self) -> String;
-    // #TODO needs return type.
+    // #todo needs return type.
     /// Runs after the parsing pass.
     fn run(&mut self, exprs: &[Expr]);
 }
@@ -38,7 +38,7 @@ pub fn compute_parse_error_diagnostics(errors: Vec<Error>) -> Vec<Diagnostic> {
                 data: None,
             });
         } else {
-            // #TODO how to handle errors without range?
+            // #todo how to handle errors without range?
         }
     }
 
@@ -48,13 +48,13 @@ pub fn compute_parse_error_diagnostics(errors: Vec<Error>) -> Vec<Diagnostic> {
 pub fn compute_diagnostics(input: &str) -> Vec<Diagnostic> {
     let result = parse_string_all(input);
 
-    // #TODO should run all lints.
+    // #todo should run all lints.
 
     let diagnostics = match result {
         Ok(exprs) => {
             let mut diagnostics = Vec::new();
 
-            // #TODO some Lints may need the input!
+            // #todo some Lints may need the input!
 
             let mut lint = SnakeCaseNamesLint::new();
             lint.run(&exprs);

@@ -3,7 +3,7 @@ use tan::expr::Expr;
 
 use crate::Lint;
 
-// #TODO find better name
+// #todo find better name
 /// The suggested maximum length for symbols.
 const MAX_NAME_LENGTH: usize = 42;
 
@@ -32,7 +32,7 @@ impl SnakeCaseNamesLint {
 
     fn run_expr(&mut self, expr: &Expr) {
         if let Expr::List(terms) = expr.unpack() {
-            if terms.len() < 1 {
+            if terms.is_empty() {
                 return;
             }
 
@@ -41,14 +41,14 @@ impl SnakeCaseNamesLint {
             match head.unpack() {
                 Expr::Symbol(s) if s == "let" => {
                     if terms.len() < 2 {
-                        // #TODO this is an error, report!
+                        // #todo this is an error, report!
                         return;
                     }
 
                     let name = &terms[1];
 
                     let Expr::Symbol(s) = name.unpack() else {
-                        // #TODO this is an error, report!
+                        // #todo this is an error, report!
                         return;
                     };
 
@@ -78,12 +78,18 @@ impl SnakeCaseNamesLint {
                     }
                 }
                 _ => {
-                    // #TODO move above!
+                    // #todo move above!
                     for t in terms {
                         self.run_expr(t);
                     }
                 }
             }
         }
+    }
+}
+
+impl Default for SnakeCaseNamesLint {
+    fn default() -> Self {
+        Self::new()
     }
 }
