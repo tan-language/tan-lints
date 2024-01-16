@@ -53,6 +53,7 @@ impl NoArrowInNamesLint {
                     // #todo extract some machinery
 
                     if s.contains("->") {
+                        // #todo #fix the range seems wrong, up to the `->` start, weird.
                         if let Some(range) = name.range() {
                             let start = lsp_types::Position {
                                 line: range.start.line as u32,
