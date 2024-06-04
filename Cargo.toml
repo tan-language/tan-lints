@@ -10,5 +10,5 @@ edition = "2021"
 
 
 [dependencies]
-lsp-types = "0.95"
+lsp-types = "0.96"
 tan = { path = "../tan", version = "0.14" }
