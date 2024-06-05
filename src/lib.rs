@@ -4,7 +4,7 @@ use lints::{
     no_arrow_in_names_lint::NoArrowInNamesLint, snake_case_names_lint::SnakeCaseNamesLint,
 };
 pub use lsp_types::{Diagnostic, DiagnosticSeverity, Range};
-use tan::{api::parse_string_all, error::Error, expr::Expr};
+use tan::{error::Error, expr::Expr};
 
 pub trait Lint {
     /// A unique name for the lint.
@@ -14,11 +14,13 @@ pub trait Lint {
     fn run(&mut self, exprs: &[Expr]);
 }
 
-pub fn compute_parse_error_diagnostics(errors: Vec<Error>) -> Vec<Diagnostic> {
+pub fn compute_parse_error_diagnostics(errors: &[Error]) -> Vec<Diagnostic> {
     let mut diagnostics: Vec<Diagnostic> = Vec::new();
 
     for error in errors {
         if let Some(range) = error.range() {
+            // #todo use lsp_range_from_tan_range helper
+            // #todo move that helper to tan-analysis.
             let start = lsp_types::Position {
                 line: range.start.line as u32,
                 character: range.start.col as u32,
@@ -47,12 +49,12 @@ pub fn compute_parse_error_diagnostics(errors: Vec<Error>) -> Vec<Diagnostic> {
     diagnostics
 }
 
-pub fn compute_diagnostics(input: &str) -> Vec<Diagnostic> {
-    let result = parse_string_all(input);
+pub fn compute_diagnostics(parse_result: &Result<Vec<Expr>, Vec<Error>>) -> Vec<Diagnostic> {
+    // let result = parse_string_all(input);
 
     // #todo should run all lints.
 
-    match result {
+    match parse_result {
         Ok(exprs) => {
             let mut diagnostics = Vec::new();
 
